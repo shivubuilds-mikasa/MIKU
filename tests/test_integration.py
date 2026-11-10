@@ -1,5 +1,6 @@
 import unittest
 import requests
+
 from pathlib import Path
 from miku.config import OLLAMA_URL, DEFAULT_MODEL, DATA
 from miku.memory import remember, history, add_memory, search_memory, delete_memory

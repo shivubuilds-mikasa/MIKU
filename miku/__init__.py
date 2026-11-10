@@ -1,0 +1,1 @@
+"""Miku local desktop assistant."""

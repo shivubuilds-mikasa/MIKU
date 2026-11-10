@@ -1,6 +1,5 @@
 import requests
 import re
-
 from .config import OLLAMA_URL, DEFAULT_MODEL
 from .tools import ollama_tools, execute
 from .memory import remember, history, add_memory, search_memory

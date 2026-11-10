@@ -1,9 +1,14 @@
-"""Per-user Ctrl+J listener. No admin rights, shell execution, or network access."""
+"""Per-user Ctrl+J listener; only local Ollama API checks and no shell execution."""
 import ctypes
+import os
+import shutil
 import subprocess
 import sys
+import time
 from ctypes import wintypes
 from pathlib import Path
+from urllib.parse import urlparse
+from urllib.request import urlopen
 
 ROOT = Path(__file__).resolve().parent
 APP = ROOT / "main.py"
@@ -11,6 +16,8 @@ PYTHONW = ROOT / ".venv" / "Scripts" / "pythonw.exe"
 LOG = ROOT / "data" / "hotkey.log"
 WM_HOTKEY = 0x0312
 MOD_CONTROL = 0x0002
+OLLAMA_URL = os.getenv("MIKU_OLLAMA_URL", os.getenv("JARVIS_OLLAMA_URL", "http://localhost:11434")).rstrip("/")
+_ollama_process = None
 
 
 class POINT(ctypes.Structure):
@@ -33,6 +40,55 @@ def log(message):
             stream.write(message + "\n")
     except OSError:
         pass
+
+
+def _ollama_ready():
+    try:
+        with urlopen(f"{OLLAMA_URL}/api/tags", timeout=1) as response:
+            return response.status == 200
+    except Exception:
+        return False
+
+
+def ensure_ollama():
+    """Start the installed local Ollama server when Ctrl+J is pressed, if needed."""
+    global _ollama_process
+    host = urlparse(OLLAMA_URL).hostname
+    if host not in {"localhost", "127.0.0.1", "::1"}:
+        return  # Never try to start a local process for a remote Ollama endpoint.
+    if _ollama_ready():
+        return
+
+    executable = shutil.which("ollama")
+    if not executable:
+        candidate = Path(os.environ.get("LOCALAPPDATA", "")) / "Programs" / "Ollama" / "ollama.exe"
+        if candidate.is_file():
+            executable = str(candidate)
+    if not executable:
+        log("Ollama is not responding and ollama.exe was not found; Miku will still open.")
+        return
+
+    try:
+        _ollama_process = subprocess.Popen(
+            [executable, "serve"],
+            cwd=str(ROOT),
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            creationflags=subprocess.CREATE_NO_WINDOW | subprocess.CREATE_NEW_PROCESS_GROUP,
+            close_fds=True,
+        )
+    except Exception as exc:
+        log(f"Could not start Ollama: {exc}")
+        return
+
+    deadline = time.monotonic() + 20
+    while time.monotonic() < deadline:
+        if _ollama_ready():
+            log("Ollama API ready; opening Miku.")
+            return
+        time.sleep(0.5)
+    log("Ollama did not become ready within 20 seconds; Miku will still open.")
 
 
 def show_or_launch():
@@ -75,6 +131,7 @@ def main():
             if result <= 0:
                 break
             if message.message == WM_HOTKEY and message.wParam == 1:
+                ensure_ollama()
                 show_or_launch()
     finally:
         user32.UnregisterHotKey(None, 1)

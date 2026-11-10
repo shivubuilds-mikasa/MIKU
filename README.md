@@ -23,7 +23,7 @@
 |:--|:--|:--|:--|
 | Talk to local Ollama models in a persistent chat | Push to talk with local Whisper transcription; hear replies through Windows speech | Launch apps, inspect and switch windows, take screenshots, and use keyboard or mouse tools | Keep chat history and explicit memories in a local SQLite database |
 
-- **Fast to reach:** press **Ctrl + J** from anywhere to show or launch Miku.
+- **Fast to reach:** press **Ctrl + J** from anywhere; Miku's listener starts Ollama if needed, then opens or focuses Miku.
 - **Made for a real desktop:** choose between Qwen 2.5 7B, Qwen 3.5 2B, and a Qwen Coder model.
 - **Responsive while thinking:** keep typing while a reply is generating; the next prompt waits in a queue.
 - **Google in your Chrome profile:** searches open in the Chrome profile named **Mikasa**. Chrome protects its regular profile from automated page reading, so Miku opens results for you to inspect instead of claiming to summarize them.

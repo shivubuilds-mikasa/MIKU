@@ -1,6 +1,6 @@
 # Troubleshooting
 
-- **Ollama offline:** start Ollama and check `http://localhost:11434/api/tags`.
+- **Ollama offline:** Ctrl+J attempts to start the existing local Ollama server. Check `http://localhost:11434/api/tags`; if it still fails, open Ollama from the Start menu and check `data/hotkey.log`.
 - **Model unavailable:** verify the exact model tag with `ollama list`; restart Miku after pulling models.
 - **Slow inference:** select `qwen3.5:2b`; Ollama may share limited VRAM with the Windows desktop.
 - **Ctrl+J does not work:** open `Install Miku Hotkey.ps1` from the project folder; ensure no other app already owns Ctrl+J. Check `data/hotkey.log`.

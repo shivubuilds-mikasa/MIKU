@@ -24,7 +24,7 @@ Ollama must be running at `http://localhost:11434`. Miku defaults to `qwen2.5:7b
 
 ## Ctrl + J and shortcuts
 
-Run `Install Miku Hotkey.ps1` once to add a per-user Startup shortcut. The listener starts at sign-in and opens or focuses Miku when you press **Ctrl + J**. It does not install a service or require administrator rights.
+Run `Install Miku Hotkey.ps1` once to add a per-user Startup shortcut. The listener starts at sign-in. When you press **Ctrl + J**, it checks Ollama and starts the existing local server if needed, then opens or focuses Miku. It does not install a service or require administrator rights.
 
 Run `Create Miku Shortcut.ps1` to add a Desktop shortcut. Alternatively, launch `Launch Miku.bat` from File Explorer.
 

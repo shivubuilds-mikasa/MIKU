@@ -1,6 +1,5 @@
 # Architecture
 
-
 - `main.py` starts a single-instance PySide6 desktop app.
 - `miku/agent.py` sends chat and registered tool calls to local Ollama, then returns tool results for follow-up.
 - `miku/tools.py` provides app launching, accessible window inspection, Google searches opened in the user's Mikasa Chrome profile, approved-root file operations, SQLite memory actions, and screenshot/input tools. Chrome's protected regular profile is not read by Miku.

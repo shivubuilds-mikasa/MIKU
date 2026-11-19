@@ -1,6 +1,5 @@
 <p align="center">
   <img src="https://capsule-render.vercel.app/api?type=waving&color=0:09090b,45:17152f,100:665cff&height=230&section=header&text=MIKU&fontSize=92&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Your%20local%20AI%20desktop%20companion&descAlignY=60&descSize=19" alt="MIKU — your local AI desktop companion" width="100%" />
-  
 </p>
 
 <p align="center">
